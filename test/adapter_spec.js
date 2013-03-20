@@ -103,7 +103,7 @@ module.exports = function(name, spec) {
           assert.typeOf ( validator.validate, 'function' );
         },
 
-        '(attributes) - when valid data': function(done) {
+        '(attributes, implicit_schema) - when valid data': function(done) {
           var data = {title: "A title"};
 
           validator.validate(data, schema, function(err, errors, valid) {
@@ -113,7 +113,7 @@ module.exports = function(name, spec) {
           });
         },
 
-        '(attributes) - when invalid data': function(done) {
+        '(attributes, implicit_schema) - when invalid data': function(done) {
           var data = {title: "A"};
 
           validator.validate(data, schema, function(err, errors, valid) {
@@ -124,7 +124,28 @@ module.exports = function(name, spec) {
           });
         },
 
-        '(attributes, options) - when valid data': function(done) {
+        '(attributes, explicit_schema) - when valid data': function(done) {
+          var data = {title: "A title"};
+
+          validator.validate(data, {type: 'object', properties: schema}, function(err, errors, valid) {
+            assert.typeOf ( errors, 'null' );
+            assert.equal ( valid, true );
+            done();
+          });
+        },
+
+        '(attributes, explicit_schema) - when invalid data': function(done) {
+          var data = {title: "A"};
+
+          validator.validate(data, {type: 'object', properties: schema}, function(err, errors, valid) {
+            // assert.typeOf ( errors, 'object' );
+            assert.equal ( errors.length, 1 );
+            assert.equal ( valid, false );
+            done();
+          });
+        },
+
+        '(attributes, implicit_schema, options) - when valid data': function(done) {
           var data = {title: "A title"};
 
           validator.validate(data, schema, {}, function(err, errors, valid) {
@@ -134,10 +155,31 @@ module.exports = function(name, spec) {
           });
         },
 
-        '(attributes, options) - when invalid data': function(done) {
+        '(attributes, implicit_schema, options) - when invalid data': function(done) {
           var data = {title: "A"};
 
           validator.validate(data, schema, {}, function(err, errors, valid) {
+            // assert.typeOf ( errors, 'object' );
+            assert.equal ( errors.length, 1 );
+            assert.equal ( valid, false );
+            done();
+          });
+        },
+
+        '(attributes, explicit_schema, options) - when valid data': function(done) {
+          var data = {title: "A title"};
+
+          validator.validate(data, {type: 'object', properties: schema}, {}, function(err, errors, valid) {
+            assert.typeOf ( errors, 'null' );
+            assert.equal ( valid, true );
+            done();
+          });
+        },
+
+        '(attributes, explicit_schema, options) - when invalid data': function(done) {
+          var data = {title: "A"};
+
+          validator.validate(data, {type: 'object', properties: schema}, {}, function(err, errors, valid) {
             // assert.typeOf ( errors, 'object' );
             assert.equal ( errors.length, 1 );
             assert.equal ( valid, false );
