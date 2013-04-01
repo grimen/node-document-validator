@@ -22,3 +22,5 @@ module.exports.flag = function(value, default_value) {
 module.exports.assert = chai.assert;
 
 module.exports.debug = console.log;
+
+module.exports.diff = require('json-diff').diff;

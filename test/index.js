@@ -87,6 +87,115 @@ module.exports = {
       assert.property ( validator, 'validate' );
       assert.typeOf ( validator.validate, 'function' );
       assert.throws ( validator.validate, Error );
+    },
+
+    'Interface': {
+      '#_validate': function(done) {
+        assert.property ( validator, 'validate' );
+        assert.typeOf ( validator.validate, 'function' );
+
+        var attributes = {
+          title: 'A title'
+        };
+
+        var schema = {
+          title: {
+            type: 'string',
+            required: true,
+            minLength: 7
+          },
+          description: {
+            type: 'string',
+            required: false,
+            default: function() { return 'Description for "' + this.title + '"'; }
+          },
+          tags: {
+            type: 'array',
+            required: false,
+            items: {type: 'string'},
+            default: ['foo', 'bar']
+          },
+          comments: {
+            type: 'array',
+            required: false,
+            items: {
+              type: 'object',
+              properties: {
+                text: {
+                  type: "string"
+                },
+                moderator: {
+                  type: "boolean",
+                  default: true
+                }
+              }
+            },
+            default: [{text: "First."}]
+          }
+        };
+
+        validator._validate([attributes, schema, done], function(_attributes, _schema, _options, _done) {
+          assert.deepEqual ( _attributes, {
+            title: 'A title',
+            description: 'Description for "A title"',
+            tags: ['foo', 'bar'],
+            comments: [
+              {
+                text: "First.",
+                moderator: true
+              }
+            ]
+          } );
+
+          assert.deepEqual ( _schema, {
+            type: 'object',
+            properties: {
+              title: {
+                type: 'string',
+                required: true,
+                minLength: 7
+              },
+              description: {
+                type: 'string',
+                required: false,
+                default: schema.description.default
+              },
+              tags: {
+                type: 'array',
+                required: false,
+                items: {
+                  type: 'string'
+                },
+                default: ['foo', 'bar']
+              },
+              comments: {
+                type: 'array',
+                required: false,
+                items: {
+                  type: 'object',
+                  properties: {
+                    text: {
+                      type: "string"
+                    },
+                    moderator: {
+                      type: "boolean",
+                      default: true
+                    }
+                  }
+                },
+                default: [
+                  {
+                    text: "First.",
+                    moderator: true
+                  }
+                ]
+              }
+            }
+          } );
+
+          _done();
+        });
+      }
     }
   }
 

@@ -2,7 +2,7 @@
   "name": "node-document-validator",
   "description": "Validator adapter interface for `node-document` ODM for Node.js.",
   "keywords": ["document", "odm", "object document mapper", "generic", "unified", "validator", "schema", "adapter", "interface"],
-  "version": "0.1.0-pre3",
+  "version": "0.1.0-pre4",
   "homepage": "https://github.com/grimen/node-document-validator",
   "repository": {
     "type": "git",
@@ -43,7 +43,8 @@
     "longjohn": "latest",
     "colors": "latest",
     "funargs": "latest",
-    "sugar": "latest"
+    "sugar": "latest",
+    "json-diff": "latest"
   },
   "devDependencies": {
     "mocha": "latest",

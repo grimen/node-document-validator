@@ -1,5 +1,6 @@
 var helper = require('./helper'),
     assert = helper.assert,
+    diff = helper.diff,
     debug = helper.debug;
 
 // -----------------------
@@ -91,9 +92,37 @@ module.exports = function(name, spec) {
         before: function() {
           schema = {
             title: {
-              required: true,
               type: 'string',
+              required: true,
               minLength: 7
+            },
+            description: {
+              type: 'string',
+              required: false,
+              default: function() { return 'Description for "' + this.title + '"'; }
+            },
+            tags: {
+              type: 'array',
+              required: false,
+              items: {type: 'string'},
+              default: ['foo', 'bar']
+            },
+            comments: {
+              type: 'array',
+              required: false,
+              items: {
+                type: 'object',
+                properties: {
+                  text: {
+                    type: "string"
+                  },
+                  moderator: {
+                    type: "boolean",
+                    default: true
+                  }
+                }
+              },
+              default: [{text: "First."}]
             }
           };
         },
@@ -105,84 +134,184 @@ module.exports = function(name, spec) {
 
         '(attributes, implicit_schema) - when valid data': function(done) {
           var data = {title: "A title"};
+          var expected = {
+            title: 'A title',
+            description: 'Description for "A title"',
+            tags: ['foo', 'bar'],
+            comments: [
+              {
+                text: "First.",
+                moderator: true
+              }
+            ]
+          };
 
           validator.validate(data, schema, function(err, errors, valid) {
+            assert.ok ( !err, err );
             assert.typeOf ( errors, 'null' );
             assert.equal ( valid, true );
+            assert.deepEqual ( data, expected, diff(data, expected) );
             done();
           });
         },
 
         '(attributes, implicit_schema) - when invalid data': function(done) {
           var data = {title: "A"};
+          var expected = {
+            title: 'A',
+            description: 'Description for "A title"',
+            tags: ['foo', 'bar'],
+            comments: [
+              {
+                text: "First.",
+                moderator: true
+              }
+            ]
+          };
 
           validator.validate(data, schema, function(err, errors, valid) {
-            // assert.typeOf ( errors, 'object' );
+            assert.ok ( !err, err );
             assert.equal ( errors.length, 1 );
             assert.equal ( valid, false );
+            assert.deepEqual ( data, expected, diff(data, expected) );
             done();
           });
         },
 
         '(attributes, explicit_schema) - when valid data': function(done) {
           var data = {title: "A title"};
+          var expected = {
+            title: 'A title',
+            description: 'Description for "A title"',
+            tags: ['foo', 'bar'],
+            comments: [
+              {
+                text: "First.",
+                moderator: true
+              }
+            ]
+          };
 
           validator.validate(data, {type: 'object', properties: schema}, function(err, errors, valid) {
+            assert.ok ( !err, err );
             assert.typeOf ( errors, 'null' );
             assert.equal ( valid, true );
+            assert.deepEqual ( data, expected, diff(data, expected) );
             done();
           });
         },
 
         '(attributes, explicit_schema) - when invalid data': function(done) {
           var data = {title: "A"};
+          var expected = {
+            title: 'A',
+            description: 'Description for "A title"',
+            tags: ['foo', 'bar'],
+            comments: [
+              {
+                text: "First.",
+                moderator: true
+              }
+            ]
+          };
 
           validator.validate(data, {type: 'object', properties: schema}, function(err, errors, valid) {
-            // assert.typeOf ( errors, 'object' );
+            assert.ok ( !err, err );
             assert.equal ( errors.length, 1 );
             assert.equal ( valid, false );
+            assert.deepEqual ( data, expected, diff(data, expected) );
             done();
           });
         },
 
         '(attributes, implicit_schema, options) - when valid data': function(done) {
           var data = {title: "A title"};
+          var expected = {
+            title: 'A title',
+            description: 'Description for "A title"',
+            tags: ['foo', 'bar'],
+            comments: [
+              {
+                text: "First.",
+                moderator: true
+              }
+            ]
+          };
 
           validator.validate(data, schema, {}, function(err, errors, valid) {
+            assert.ok ( !err, err );
             assert.typeOf ( errors, 'null' );
             assert.equal ( valid, true );
+            assert.deepEqual ( data, expected, diff(data, expected) );
             done();
           });
         },
 
         '(attributes, implicit_schema, options) - when invalid data': function(done) {
           var data = {title: "A"};
+          var expected = {
+            title: 'A',
+            description: 'Description for "A title"',
+            tags: ['foo', 'bar'],
+            comments: [
+              {
+                text: "First.",
+                moderator: true
+              }
+            ]
+          };
 
           validator.validate(data, schema, {}, function(err, errors, valid) {
-            // assert.typeOf ( errors, 'object' );
+            assert.ok ( !err, err );
             assert.equal ( errors.length, 1 );
             assert.equal ( valid, false );
+            assert.deepEqual ( data, expected, diff(data, expected) );
             done();
           });
         },
 
         '(attributes, explicit_schema, options) - when valid data': function(done) {
           var data = {title: "A title"};
+          var expected = {
+            title: 'A title',
+            description: 'Description for "A title"',
+            tags: ['foo', 'bar'],
+            comments: [
+              {
+                text: "First.",
+                moderator: true
+              }
+            ]
+          };
 
           validator.validate(data, {type: 'object', properties: schema}, {}, function(err, errors, valid) {
+            assert.ok ( !err, err );
             assert.typeOf ( errors, 'null' );
             assert.equal ( valid, true );
+            assert.deepEqual ( data, expected, diff(data, expected) );
             done();
           });
         },
 
         '(attributes, explicit_schema, options) - when invalid data': function(done) {
           var data = {title: "A"};
+          var expected = {
+            title: 'A',
+            description: 'Description for "A title"',
+            tags: ['foo', 'bar'],
+            comments: [
+              {
+                text: "First.",
+                moderator: true
+              }
+            ]
+          };
 
           validator.validate(data, {type: 'object', properties: schema}, {}, function(err, errors, valid) {
-            // assert.typeOf ( errors, 'object' );
+            assert.ok ( !err, err );
             assert.equal ( errors.length, 1 );
             assert.equal ( valid, false );
+            assert.deepEqual ( data, expected, diff(data, expected) );
             done();
           });
         }
