@@ -11,6 +11,7 @@ Unified interface for validating data based on a custom JSON Schema.
 
 * [Amanda](https://github.com/grimen/node-document-validator-amanda)
 * [Schema.js](https://github.com/grimen/node-document-validator-schema)
+* [JSONGate](https://github.com/grimen/node-document-validator-jsongate)
 * [JSONSchema](https://github.com/grimen/node-document-validator-jsonschema)
 * [JSV](https://github.com/grimen/node-document-validator-jsv)
 
